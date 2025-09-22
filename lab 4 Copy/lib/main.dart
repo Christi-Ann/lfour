@@ -41,17 +41,9 @@ void main(List<String> args) {
   ModifiedMemoryGameModel? model = make(R, C, S, matchingModeTag, turnOrderTag);
   if (model == null) return;
 
-  
-  // // initialize game controller
-  // final controller = GameController();
-  // controller.initializeGame(
-  //   rows: R,
-  //   cols: C,
-  //   seed: S,
-  //   matchingMode: matchingModeTag,
-  //   turnOrder: turnOrderTag,
-  // );
+  // initialize game controller with the model
+  final controller = GameController(model);
 
-  // // run app
-  // runApp(ModifiedMemoryGameApp(controller: controller));
+  // run app
+  runApp(ModifiedMemoryGameApp(controller: controller));
 }

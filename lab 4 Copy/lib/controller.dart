@@ -1,76 +1,19 @@
 import 'package:flutter/material.dart';
 import 'model.dart';
 import 'common_types.dart';
-import 'turn_order.dart';
-import 'matching_mode.dart';
 
 class GameController extends ChangeNotifier {
   ModifiedMemoryGameModel? _model;
   
   ModifiedMemoryGameModel? get model => _model;
   
-  void initializeGame({
-    required int rows,
-    required int cols,
-    required int seed,
-    required MatchingModeTag matchingMode,
-    required TurnOrderTag turnOrder,
-  }) {
-    print('Controller: making game with rows=$rows, cols=$cols, seed=$seed, matchingMode=$matchingMode, turnOrder=$turnOrder');
-    try {
-      // grid contraints validation
-      int tokensPerGroup = _getTokensPerGroup(matchingMode);
-      if ((rows * cols) % tokensPerGroup != 0) {
-        throw Exception('Invalid grid');
-      }
-      
-     
-      TurnOrder playerHandler = _createTurnOrder(turnOrder);
-      
-      
-      MatchingMode gridHandler = _createMatchingMode(matchingMode, rows, cols, seed);
-      
-      _model = ModifiedMemoryGameModel(
-        playerHandler: playerHandler,
-        gridHandler: gridHandler,
-      );
-      print('Controller: model initialized successfully');
-      notifyListeners();
-    } catch (e) {
-      // invalid grid 
-      print('Controller: model initialization failed: $e');
-      _model = null;
-      notifyListeners();
-    }
-  }
-  
-  TurnOrder _createTurnOrder(TurnOrderTag turnOrder) {
-    switch (turnOrder) {
-      case TurnOrderTag.roundRobin:
-        return TurnOrder();
-      case TurnOrderTag.untilIncorrect:
-        return TurnOrder_UntilIncorrect();
-    }
-  }
-  
-  MatchingMode _createMatchingMode(MatchingModeTag matchingMode, int rows, int cols, int seed) {
-    switch (matchingMode) {
-      case MatchingModeTag.regular:
-        return MatchingMode(R: rows, C: cols, S: seed);
-      case MatchingModeTag.extra1:
-        return MatchingMode_Extra1(R: rows, C: cols, S: seed);
-      case MatchingModeTag.extra2:
-        return MatchingMode_Extra2(R: rows, C: cols, S: seed);
-    }
-  }
-  
-  int _getTokensPerGroup(MatchingModeTag matchingMode) {
-    switch (matchingMode) {
-      case MatchingModeTag.regular:
-        return 2;
-      case MatchingModeTag.extra1:
-      case MatchingModeTag.extra2:
-        return 3;
+  // Constructor that takes a model as parameter
+  GameController(ModifiedMemoryGameModel model) {
+    _model = model;
+    print('Controller: initialized with provided model');
+    print('Controller: model is null? ${_model == null}');
+    if (_model != null) {
+      print('Controller: model grid size ${_model!.rowCount}x${_model!.colCount}');
     }
   }
   
