@@ -168,6 +168,10 @@ class GameView extends StatelessWidget {
       return Container();
     }
     
+    // Only show the confirm button when the player is ready to confirm their turn
+    if (!controller.awaitingConfirmation) {
+      return Container();
+    }
     
     return ElevatedButton(
       onPressed: () {
